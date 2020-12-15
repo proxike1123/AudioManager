@@ -1,9 +1,14 @@
 import React, { Component } from'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import Icon2 from 'react-native-vector-icons/Ionicons';
 import {callApi} from './callAPI';
 import PictureViewer from './ImageViewer';
 import URL from './url'
+import ImagePicker from 'react-native-image-crop-picker';
+import ModalPicker from './ModalPicker';
+import RNfetchBlob from 'rn-fetch-blob';
+import {buildImage} from './image-helper';
 
 const url = URL + '/';
 
@@ -15,6 +20,8 @@ export default class ImageScreen extends Component {
             imageVisible: false,
             selectedPicture: null,
             delete: 0,
+            source : null,
+            visible: false,
         }
     }
 
@@ -39,6 +46,52 @@ export default class ImageScreen extends Component {
         }
         const result = await callApi(params);
         this.setState({data: result.data})
+    }
+
+    pickImage = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+            }).then(image => {
+            const data = buildImage(image);
+            this.uploadImage(data);
+        });
+      
+    }
+
+    pickFromCamera = () => {
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+          }).then(image => {
+            const data = buildImage(image);
+            this.uploadImage(data);
+        });
+    }
+
+    uploadImage = async (data) => {
+        console.log(data)
+        // const params = {
+        //     api: '/api/upload/picture',
+        //     method: 'POST',
+        //     param: this.state.source,
+        // }
+        // const result = await callApi(params);
+        // console.log(result)
+        RNfetchBlob.fetch('POST', `${URL}/api/upload/picture`, {
+            'Content-Type': 'multipart/form-data'
+        },[
+            {
+                name: 'file', filename: data.name, type: data.type, data: RNfetchBlob.wrap(data.uri),
+            }
+        ]).then((res) => {
+            Alert.alert("Upload thành công");
+            this.loadData();
+        }).catch((err) => {
+            Alert.alert("Upload thất bại, vui lòng thử lại");
+        })
     }
 
     renderItem = (item, index) => {
@@ -93,7 +146,7 @@ export default class ImageScreen extends Component {
     }
 
     closeModal = () => {
-        this.setState({imageVisible: false})
+        this.setState({imageVisible: false, visible: false})
     }
 
     openDelete = () => {
@@ -116,37 +169,55 @@ export default class ImageScreen extends Component {
                         />
                     </TouchableOpacity>
                     <Text style = {styles.title}>Ảnh</Text>
-                    <TouchableOpacity
-                        style = {[styles.delete,
-                            this.state.delete == 1 ? 
-                            {
-                                backgroundColor: 'red',
-                                borderRadius: 5,
-                            } : null
-                        ]}
-                        onPress = {this.openDelete}
-                    >
-                        <Icon 
-                            name = 'trash-2' 
-                            color = "white" 
-                            size = {30}
-                        />
-                    </TouchableOpacity>
+                </View>
+                <View style = {styles.toolBar}>
                     <TouchableOpacity
                         style = {styles.refresh}
                         onPress = {this.loadData}
                     >
                         <Icon  
                             name = 'rotate-ccw' 
-                            color = "white" 
+                            color = "#4A77F6" 
                             size = {30}
                         />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style = {styles.add}
+                        onPress = {
+                            () => this.setState({visible: true})
+                        }
+                    >
+                        <Icon2
+                            name = "add"
+                            color = "white"
+                            size = {25}
+                        />
+                        <Text style = {{
+                            color: 'white',
+                            fontSize: 16,
+                            marginLeft: 5,
+                        }}>Thêm</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style = {styles.delete2}
+                        onPress = {this.openDelete}
+                    >
+                        <Icon
+                            name = "trash-2"
+                            color = "white"
+                            size = {25}
+                        />
+                        <Text style = {{
+                            color: 'white',
+                            fontSize: 16,
+                            marginLeft: 5,
+                        }}>Xóa</Text>
                     </TouchableOpacity>
                 </View>
                 <View style = {styles.body}>
                     <FlatList
                         showsVerticalScrollIndicator = {false}
-                        numColumns = {2}
+                        numColumns = {3}
                         style = {styles.list}
                         data = {this.state.data}
                         keyExtractor = {item => item.filepath}
@@ -157,6 +228,12 @@ export default class ImageScreen extends Component {
                     visible = {this.state.imageVisible}
                     url = {this.state.selectedPicture}
                     onClose = {this.closeModal}
+                />
+                <ModalPicker
+                    visible = {this.state.visible}
+                    onClose = {this.closeModal}
+                    pickImage = {this.pickImage}
+                    pickFromCamera = {this.pickFromCamera}
                 />
             </View>
         )
@@ -191,24 +268,48 @@ const styles = StyleSheet.create({
         paddingTop: '5%'
     },
     list: {
-        height: '85%'
+        height: '75%'
     },
     image: {
-        height: 170,
-        width: 170,
+        height: 110,
+        width: 110,
     },
     fullImage: {
         margin: 10,
         
     },
-    delete: {
-        position: 'absolute',
-        right: 10,
-        bottom: 7
-    },
     refresh: {
         position: 'absolute',
-        right: 60,
+        left: 10,
         bottom: 7
+    },
+    toolBar: {
+        height: 50,
+        width: '94%',
+        marginHorizontal: '3%',
+        borderBottomWidth: 1,
+        borderBottomColor: 'gray',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center'
+    },
+    add: {
+        backgroundColor: '#28A745',
+        height: 35,
+        width: 90,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginRight: 10,
+    },
+    delete2: {
+        backgroundColor: '#DC3545',
+        height: 35,
+        width: 80,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
     }
 })

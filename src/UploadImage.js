@@ -9,6 +9,7 @@ import {callApi, uploadImage} from './callAPI'
 import createFormImage from './imageForm';
 import RNfetchBlob from 'rn-fetch-blob';
 import url from './url'
+import Icon2 from 'react-native-vector-icons/Ionicons';
 
 export default class UploadImage extends Component {
 

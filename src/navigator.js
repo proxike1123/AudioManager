@@ -47,36 +47,6 @@ const header = (props) => {
             <View style = {styles.body}>
                 <TouchableOpacity
                     style = {[styles.navigation,
-                        props.state.index == 2 ? {backgroundColor: '#DDEDFF',} : null
-                    ]}
-                    onPress = {() => props.navigation.jumpTo('Upload Ảnh')}
-                >
-                    <Icon3
-                        name = 'file-upload-outline'
-                        color = {props.state.index == 2 ? '#4A77F6' : "#7D7D7D"}
-                        size = {27}
-                    />
-                    <Text style = {[styles.navigationText,
-                        props.state.index == 2 ? {color: '#4A77F6',} : null
-                    ]}>Upload Ảnh</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style = {[styles.navigation,
-                        props.state.index == 3 ? {backgroundColor: '#DDEDFF',} : null
-                    ]}
-                    onPress = {() => props.navigation.jumpTo('Upload Video')}
-                >
-                    <Icon3
-                        name = 'folder-upload'
-                        color = {props.state.index == 3 ? '#4A77F6' : "#7D7D7D"}
-                        size = {27}
-                    />
-                    <Text style = {[styles.navigationText,
-                        props.state.index == 3 ? {color: '#4A77F6',} : null
-                    ]}>Upload Video</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style = {[styles.navigation,
                         props.state.index == 0 ? {backgroundColor: '#DDEDFF',} : null
                     ]}
                     onPress = {() => props.navigation.jumpTo('Ảnh')}
@@ -118,7 +88,7 @@ const Home = () => (
         drawerStyle = {{
             width: 280,
         }}
-        initialRouteName = 'Upload Ảnh'
+        initialRouteName = 'Ảnh'
     >
         <HomeStack.Screen name = "Ảnh" component = {ImageScreen}/>
         <HomeStack.Screen name = "Video" component = {VideoScreen}/>

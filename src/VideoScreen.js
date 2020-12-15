@@ -1,11 +1,15 @@
 import React, { Component } from'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {callApi} from './callAPI';
 import VideoPlay from './videoModal';
 import url from './url'
 import Video from 'react-native-video';
 import { Thumbnail } from 'react-native-thumbnail-video';
+import Icon2 from 'react-native-vector-icons/Ionicons';
+import ImagePicker from 'react-native-image-crop-picker';
+import RNfetchBlob from 'rn-fetch-blob';
+import {buildImage} from './image-helper';
 
 export default class VideoScreen extends Component {
     constructor(props) {
@@ -14,6 +18,7 @@ export default class VideoScreen extends Component {
             data: [],
             videoVisible: false,
             selectedVideo: null,
+            visible: false,
         }
     }
     componentDidMount () {
@@ -80,6 +85,15 @@ export default class VideoScreen extends Component {
         )
     }
 
+    pickerVideo = () => {
+        ImagePicker.openPicker({
+            mediaType: "video",
+          }).then((video) => {
+            console.log(video)
+            this.uploadVideo(video)
+          });
+    }
+
     deleteVideo = async (filepath) => {
         const params = {
             api: '/api/video/delete',
@@ -95,7 +109,24 @@ export default class VideoScreen extends Component {
     }
 
     onClose = () => {
-        this.setState({videoVisible: false})
+        this.setState({videoVisible: false,  visible: false})
+    }
+
+    uploadVideo = (source) => {
+        const data = buildImage(source)
+        console.log(data)
+        RNfetchBlob.fetch('POST', `${url}/api/upload/video`, {
+            'Content-Type': 'multipart/form-data'
+        },[
+            {
+                name: 'file', filename: data.name, type: data.type, data: RNfetchBlob.wrap(data.uri),
+            }
+        ]).then((res) => {
+            Alert.alert("Upload thành công");
+            this.loadData()
+        }).catch((err) => {
+            Alert.alert("Upload thất bại, vui lòng thử lại");
+        })
     }
 
     render () {
@@ -114,15 +145,32 @@ export default class VideoScreen extends Component {
                         />
                     </TouchableOpacity>
                     <Text style = {styles.title}>Video</Text>
+                </View>
+                <View style = {styles.toolBar}>
                     <TouchableOpacity
                         style = {styles.refresh}
                         onPress = {this.loadData}
                     >
                         <Icon  
                             name = 'rotate-ccw' 
-                            color = "white" 
+                            color = "#4A77F6" 
                             size = {30}
                         />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style = {styles.add}
+                        onPress = {this.pickerVideo}
+                    >
+                        <Icon2
+                            name = "add"
+                            color = "white"
+                            size = {25}
+                        />
+                        <Text style = {{
+                            color: 'white',
+                            fontSize: 16,
+                            marginLeft: 5,
+                        }}>Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 <View style = {styles.body}>
@@ -174,7 +222,7 @@ const styles = StyleSheet.create({
         paddingTop: '5%'
     },
     list: {
-        height: '85%'
+        height: '75%'
     },
     image: {
         height: 40,
@@ -191,7 +239,35 @@ const styles = StyleSheet.create({
     },
     refresh: {
         position: 'absolute',
-        right: 10,
+        left: 10,
         bottom: 7
+    },
+    toolBar: {
+        height: 50,
+        width: '94%',
+        marginHorizontal: '3%',
+        borderBottomWidth: 1,
+        borderBottomColor: 'gray',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center'
+    },
+    add: {
+        backgroundColor: '#28A745',
+        height: 35,
+        width: 90,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    delete2: {
+        backgroundColor: '#DC3545',
+        height: 35,
+        width: 80,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
     }
 })
