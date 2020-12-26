@@ -35,14 +35,14 @@ const header = (props) => {
     return (
         <View style = {styles.container}>
             <View style = {styles.header}>
-                <View style = {styles.logoContainer}>
+                {/* <View style = {styles.logoContainer}>
                     <Image 
                         source = {require('./assets/bk.png')}
                         style = {styles.logo}
                     />
-                </View>
-                <Text style = {[styles.text, {fontWeight: 'bold'}]}>Nguyễn Đăng Bin</Text>
-                <Text style = {[styles.text, {}]}>17T2</Text>
+                </View> */}
+                <Text style = {[styles.text, {fontWeight: 'bold'}]}>Trần Huy Hoàng</Text>
+                <Text style = {[styles.text, {}]}>17T1</Text>
             </View>
             <View style = {styles.body}>
                 <TouchableOpacity
@@ -53,12 +53,12 @@ const header = (props) => {
                 >
                     <Icon2
                         name = 'picture-o'
-                        color = {props.state.index == 0 ? '#4A77F6' : "#7D7D7D"}
+                        color = {props.state.index == 0 ? 'darkorange' : "#7D7D7D"}
                         size = {27}
                     />
                     <Text style = {[styles.navigationText,
-                        props.state.index == 0 ? {color: '#4A77F6',} : null
-                    ]}>Xem Ảnh</Text>
+                        props.state.index == 0 ? {color: 'darkorange',} : null
+                    ]}>Pictures</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style = {[styles.navigation,
@@ -68,12 +68,12 @@ const header = (props) => {
                 >
                     <Icon1
                         name = 'folder-video'
-                        color = {props.state.index == 1 ? '#4A77F6' : "#7D7D7D"}
+                        color = {props.state.index == 1 ? 'darkorange' : "#7D7D7D"}
                         size = {27}
                     />
                     <Text style = {[styles.navigationText, 
-                        props.state.index == 1 ? {color: '#4A77F6',} : null
-                    ]}>Xem Video</Text>
+                        props.state.index == 1 ? {color: 'darkorange',} : null
+                    ]}>Videos</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -104,13 +104,13 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen 
+        {/* <Stack.Screen 
             name="Splash" 
             component={Splash} 
             options={({ navigation, route }) => ({
                headerShown: false,
             })}
-        />
+        /> */}
         <Stack.Screen 
             name="Home" 
             component={Home} 
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        height: 300,
-        backgroundColor: '#4A77F6',
+        height: 80,
+        backgroundColor: 'darkorange',
         justifyContent: 'center',
         alignItems: 'center',
 

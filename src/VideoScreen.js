@@ -64,8 +64,7 @@ export default class VideoScreen extends Component {
                         width: 280,
                     }}>{item.filepath}</Text>
                      <TouchableOpacity
-                        style = {{
-                            backgroundColor: 'red',
+                        style = {{ 
                             borderRadius: 5,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -76,7 +75,7 @@ export default class VideoScreen extends Component {
                     >
                         <Icon 
                             name = 'trash-2' 
-                            color = "white" 
+                            color = "red" 
                             size = {30}
                         />
                     </TouchableOpacity>
@@ -144,9 +143,19 @@ export default class VideoScreen extends Component {
                             size = {40}
                         />
                     </TouchableOpacity>
-                    <Text style = {styles.title}>Video</Text>
+                    <TouchableOpacity
+                        style = {styles.headerAdd}
+                        onPress = {this.pickerVideo}
+                    >
+                        <Icon2
+                            name = "add"
+                            color = "white"
+                            size = {40}
+                        />
+                    </TouchableOpacity>
+                    <Text style = {styles.title}>Videos</Text>
                 </View>
-                <View style = {styles.toolBar}>
+                {/* <View style = {styles.toolBar}>
                     <TouchableOpacity
                         style = {styles.refresh}
                         onPress = {this.loadData}
@@ -172,7 +181,7 @@ export default class VideoScreen extends Component {
                             marginLeft: 5,
                         }}>Thêm</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 <View style = {styles.body}>
                     <FlatList
                         showsVerticalScrollIndicator = {false}
@@ -199,7 +208,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     header: {
-        backgroundColor: '#4A77F6',
+        backgroundColor: 'darkorange',
         height: 80,
         paddingTop: 30,
         paddingHorizontal: 10,
@@ -219,7 +228,7 @@ const styles = StyleSheet.create({
     },
     body: {
         alignItems: 'center',
-        paddingTop: '5%'
+        paddingTop: '0%'
     },
     list: {
         height: '75%'
@@ -269,5 +278,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-    }
+    },
+    headerAdd: {
+        position: 'absolute',
+        right: "2%",
+        top: 34,
+    },
 })

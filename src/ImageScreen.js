@@ -1,5 +1,5 @@
 import React, { Component } from'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Alert} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Alert, StatusBar} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import {callApi} from './callAPI';
@@ -157,6 +157,7 @@ export default class ImageScreen extends Component {
         const {navigation} = this.props;
         return (
             <View style = {styles.container}>
+                <StatusBar translucent backgroundColor = "transparent"/>
                 <View style = {styles.header}>
                     <TouchableOpacity
                         onPress = {() => navigation.openDrawer()}
@@ -168,9 +169,33 @@ export default class ImageScreen extends Component {
                             size = {40}
                         />
                     </TouchableOpacity>
-                    <Text style = {styles.title}>Ảnh</Text>
+                    <Text style = {styles.title}>Pictures</Text>
+                    <TouchableOpacity
+                        style = {styles.headerAdd}
+                        onPress = {
+                            () => this.setState({visible: true})
+                        }
+                    >
+                        <Icon2
+                            name = "add"
+                            color = "white"
+                            size = {40}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style = {[styles.headerDelete, this.state.delete == 1 ? {
+                            backgroundColor: 'red',
+                        } : null]}
+                        onPress = {this.openDelete}
+                    >
+                        <Icon
+                            name = "trash-2"
+                            color = "white"
+                            size = {30}
+                        />
+                    </TouchableOpacity>
                 </View>
-                <View style = {styles.toolBar}>
+                {/* <View style = {styles.toolBar}>
                     <TouchableOpacity
                         style = {styles.refresh}
                         onPress = {this.loadData}
@@ -213,7 +238,7 @@ export default class ImageScreen extends Component {
                             marginLeft: 5,
                         }}>Xóa</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 <View style = {styles.body}>
                     <FlatList
                         showsVerticalScrollIndicator = {false}
@@ -245,7 +270,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        backgroundColor: '#4A77F6',
+        backgroundColor: 'darkorange',
         height: 80,
         paddingTop: 30,
         paddingHorizontal: 10,
@@ -265,7 +290,7 @@ const styles = StyleSheet.create({
     },
     body: {
         alignItems: 'center',
-        paddingTop: '5%'
+        paddingTop: '2%'
     },
     list: {
         height: '75%'
@@ -311,5 +336,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+    },
+    headerAdd: {
+        position: 'absolute',
+        right: "10%",
+        top: 34,
+    },
+    headerDelete: {
+        position: 'absolute',
+        right: "2%",
+        top: 40,
+        borderRadius: 4,
     }
 })
