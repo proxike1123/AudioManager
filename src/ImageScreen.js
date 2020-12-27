@@ -265,11 +265,12 @@ const styles = StyleSheet.create({
     },
     body: {
         alignItems: 'center',
-        paddingTop: '5%'
+        paddingTop: '5%',
     },
     list: {
         height: '75%',
         width: "100%",
+        paddingLeft: "5%"
     },
     image: {
         height: 100,
