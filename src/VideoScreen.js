@@ -61,7 +61,7 @@ export default class VideoScreen extends Component {
                         resizeMode = 'contain'
                     />
                     <Text style = {{
-                        width: 280,
+                        width: "70%",
                     }}>{item.filepath}</Text>
                      <TouchableOpacity
                         style = {{
@@ -103,6 +103,7 @@ export default class VideoScreen extends Component {
             },
         }
         const result = await callApi(params);
+        this.loadData()
         if (result.success) {
             this.loadData()
         }
