@@ -50,8 +50,6 @@ export default class ImageScreen extends Component {
 
     pickImage = () => {
         ImagePicker.openPicker({
-            width: 300,
-            height: 400,
             cropping: true
             }).then(image => {
             const data = buildImage(image);
@@ -62,8 +60,6 @@ export default class ImageScreen extends Component {
 
     pickFromCamera = () => {
         ImagePicker.openCamera({
-            width: 300,
-            height: 400,
             cropping: true,
           }).then(image => {
             const data = buildImage(image);
