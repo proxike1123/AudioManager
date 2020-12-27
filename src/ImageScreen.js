@@ -199,7 +199,9 @@ export default class ImageScreen extends Component {
                         }}>Thêm</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style = {styles.delete2}
+                        style = {[styles.delete2, this.state.delete == 0 ? {
+                            backgroundColor: 'gray',
+                        } : null]}
                         onPress = {this.openDelete}
                     >
                         <Icon
@@ -270,7 +272,6 @@ const styles = StyleSheet.create({
     list: {
         height: '75%',
         width: "100%",
-        paddingLeft: "5%"
     },
     image: {
         height: 100,
